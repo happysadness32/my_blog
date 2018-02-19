@@ -1,21 +1,31 @@
 from django.shortcuts import render
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 # Create your views here.
 from django.http import HttpResponse
 
-from article.models import Article
+from .models import Article
 
 from datetime import datetime
-
+from django.http import Http404
 
 def home(request):
     post_list = Article.objects.all()
     return render(request,'home.html',{"post_list":post_list})
 
-def detail(request,my_args):
+def detail(request,id):
+    try:
+        post = Article.objects.all().filter(id=id)[0]
 
-    post = Article.objects.all()[int(my_args)]
-    str = ("title = %s,category = %s,date_time = $s,content = %s")%(post.title,post.category,post.date_time,post.content)
-    return HttpResponse(str)
-
+    except IndexError:
+        raise Http404
+    #两种写法，get获取到的是一个对象，filter获取的是一个列表
+    # try:
+    #     post = Article.objects.all().get(id=0)
+    #
+    # except Article.DoesNotExist:
+    #     raise Http404
+    return render(request, 'post.html',{"post":post})
 

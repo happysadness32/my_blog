@@ -1,7 +1,4 @@
 from django.shortcuts import render
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 # Create your views here.
 from django.http import HttpResponse
